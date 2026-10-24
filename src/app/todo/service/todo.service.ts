@@ -1,8 +1,7 @@
-import { Injectable, inject } from '@angular/core';
-import { Todo } from '../model/todo';
+import { Injectable, inject,computed,signal } from '@angular/core';
+import { Todo,TodoStatus} from '../model/todo';
 import { LoggerService } from '../../services/logger.service';
 
-let n = 1;
 
 @Injectable({
   providedIn: 'root',
@@ -10,46 +9,30 @@ let n = 1;
 export class TodoService {
   private loggerService = inject(LoggerService);
 
-  private todos: Todo[] = [];
+  readonly #todos = signal<Todo[]>([])
 
-  /**
-   * elle retourne la liste des todos
-   *
-   * @returns Todo[]
-   */
-  getTodos(): Todo[] {
-    return this.todos;
-  }
+  readonly todos=  this.#todos.asReadonly();
 
-  /**
-   *Elle permet d'ajouter un todo
-   *
-   * @param todo: Todo
-   *
-   */
+  readonly waiting= computed( () => this.#todos().filter(todo => todo.status === "waiting") );
+  readonly inProgress= computed( () => this.#todos().filter(todo => todo.status === "in progress") )
+  readonly done= computed( () => this.#todos().filter(todo => todo.status === "done") )
+
   addTodo(todo: Todo): void {
-    this.todos.push(todo);
+    const id = Math.max(0, ...this.#todos().map(t => t.id)) + 1;
+    this.#todos.update(list => [...list, { ...todo, id, status: 'waiting' }]);
   }
 
-  /**
-   * Delete le todo s'il existe
-   *
-   * @param todo: Todo
-   * @returns boolean
-   */
-  deleteTodo(todo: Todo): boolean {
-    const index = this.todos.indexOf(todo);
-    if (index > -1) {
-      this.todos.splice(index, 1);
-      return true;
-    }
-    return false;
+  deleteTodo(todo: Todo): void {
+    this.#todos.update(list => list.filter(t => t.id !== todo.id));
   }
 
-  /**
-   * Logger la liste des todos
-   */
-  logTodos() {
-    this.loggerService.logger(this.todos);
+  changeStatus(todo: Todo, status: TodoStatus): void {
+    this.#todos.update(list => list.map(t => (t.id === todo.id ? { ...t, status } : t)));
   }
+
+    logTodos() {
+    this.loggerService.logger(this.#todos());
+  }
+
 }
+
