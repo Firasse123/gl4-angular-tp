@@ -51,6 +51,8 @@ import { ProductsComponent } from "./products/products.component";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { AutocompleteComponent } from "./cv/autocomplete/autocomplete.component";
 import { SliderComponent } from "./rxjs/slider/slider.component";
+import { RainbowDirective } from './directives/rainbow.directive';
+import { RainbowTestComponent } from './directives/rainbow-test/rainbow-test.component';
 
 @NgModule({
   declarations: [
@@ -90,6 +92,8 @@ import { SliderComponent } from "./rxjs/slider/slider.component";
     RhComponent,
     UserListComponent,
     ProductsComponent,
+    RainbowDirective,
+    RainbowTestComponent,
   ],
   bootstrap: [AppComponent],
   imports: [
