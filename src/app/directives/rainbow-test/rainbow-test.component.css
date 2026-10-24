@@ -1,0 +1,7 @@
+/* rainbow-test.css */
+.rainbow-demo {
+  border: 3px solid black;
+}
+.rainbow-demo:focus {
+  box-shadow: none;
+}
