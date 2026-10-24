@@ -1,6 +1,6 @@
-import { Injectable, inject } from "@angular/core";
+import { Injectable, inject ,signal} from "@angular/core";
 import { Cv } from "../model/cv";
-import { Observable, Subject } from "rxjs";
+import { Observable } from "rxjs";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { API } from "../../../config/api.config";
 
@@ -14,11 +14,12 @@ export class CvService {
   /**
    * Le subject permettant de créer le flux des cvs sélectionnés
    */
-  #selectCvSuject$ = new Subject<Cv>();
   /**
    * Le flux des cvs sélectionnés
    */
-  selectCv$ = this.#selectCvSuject$.asObservable();
+
+  readonly #selectedCv = signal<Cv | null>(null);
+  readonly selectedCv = this.#selectedCv.asReadonly();
   constructor() {
     this.cvs = [
       new Cv(1, "aymen", "sellaouti", "teacher", "as.jpg", "1234", 40),
@@ -131,6 +132,7 @@ export class CvService {
    * @param cv : Le cv à ajouter dans le flux des cvs sélectionnés
    */
   selectCv(cv: Cv) {
-    this.#selectCvSuject$.next(cv);
+    this.#selectedCv.set(cv);
+
   }
 }
