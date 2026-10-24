@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable,signal } from '@angular/core';
 import { Cv } from '../model/cv';
 
 @Injectable({
@@ -6,6 +6,8 @@ import { Cv } from '../model/cv';
 })
 export class EmbaucheService {
   private embauchees: Cv[] = [];
+  readonly #embauchees = signal<Cv[]>([]);
+  readonly embaucheesSignal = this.#embauchees.asReadonly();
 
   constructor() {}
 
@@ -31,6 +33,7 @@ export class EmbaucheService {
   embauche(cv: Cv): boolean {
     if (this.embauchees.indexOf(cv) == -1) {
       this.embauchees.push(cv);
+      this.#embauchees.update(list => [...list, cv]);
       return true;
     }
     return false;

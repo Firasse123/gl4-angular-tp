@@ -13,8 +13,5 @@ import { ItemComponent } from '../item/item.component';
 export class EmbaucheComponent {
   private embaucheService = inject(EmbaucheService);
 
-  public embauchees: Cv[] = [];
-  constructor() {
-    this.embauchees = this.embaucheService.getEmbauchees();
-  }
+  embauchees = this.embaucheService.embaucheesSignal;
 }
