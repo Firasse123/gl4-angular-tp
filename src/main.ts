@@ -15,6 +15,7 @@ import { AppComponent } from "./app/app.component";
 
 bootstrapApplication(AppComponent, {
     providers: [
+        provideZoneChangeDetection(),
         importProvidersFrom(BrowserModule, FormsModule, BrowserAnimationsModule, // required animations module
         ToastrModule.forRoot(), // ToastrModule added
         AppRoutingModule, ReactiveFormsModule, ServiceWorkerModule.register("ngsw-worker.js", {
