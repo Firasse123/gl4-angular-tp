@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { Todo } from '../model/todo';
 import { LoggerService } from '../../services/logger.service';
 
@@ -10,46 +10,30 @@ let n = 1;
 export class TodoService {
   private loggerService = inject(LoggerService);
 
-  private todos: Todo[] = [];
+  /** Writable signal: only the service can change the list. */
+  private readonly _todos = signal<Todo[]>([]);
+
+  /** Read-only view of the list for the components. */
+  readonly todos = this._todos.asReadonly();
 
   /**
-   * elle retourne la liste des todos
-   *
-   * @returns Todo[]
-   */
-  getTodos(): Todo[] {
-    return this.todos;
-  }
-
-  /**
-   *Elle permet d'ajouter un todo
-   *
-   * @param todo: Todo
-   *
+   * Add a todo (we create a new array so the signal notifies its readers)
    */
   addTodo(todo: Todo): void {
-    this.todos.push(todo);
+    this._todos.update((todos) => [...todos, todo]);
   }
 
   /**
-   * Delete le todo s'il existe
-   *
-   * @param todo: Todo
-   * @returns boolean
+   * Delete the todo (filter returns a new array without it)
    */
-  deleteTodo(todo: Todo): boolean {
-    const index = this.todos.indexOf(todo);
-    if (index > -1) {
-      this.todos.splice(index, 1);
-      return true;
-    }
-    return false;
+  deleteTodo(todo: Todo): void {
+    this._todos.update((todos) => todos.filter((t) => t !== todo));
   }
 
   /**
-   * Logger la liste des todos
+   * Log the list of todos
    */
   logTodos() {
-    this.loggerService.logger(this.todos);
+    this.loggerService.logger(this.todos());
   }
 }
