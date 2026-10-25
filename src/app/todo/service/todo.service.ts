@@ -2,13 +2,14 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Todo } from '../model/todo';
 import { LoggerService } from '../../services/logger.service';
 
-let n = 1;
-
 @Injectable({
   providedIn: 'root',
 })
 export class TodoService {
   private loggerService = inject(LoggerService);
+
+  /** Next id to give to a new todo */
+  private nextId = 1;
 
   /** Writable signal: only the service can change the list. */
   private readonly _todos = signal<Todo[]>([]);
@@ -17,17 +18,19 @@ export class TodoService {
   readonly todos = this._todos.asReadonly();
 
   /**
-   * Add a todo (we create a new array so the signal notifies its readers)
+   * Create a todo with a unique id and the 'waiting' status,
+   * then add it (we create a new array so the signal notifies its readers)
    */
-  addTodo(todo: Todo): void {
+  addTodo(name: string, content: string): void {
+    const todo: Todo = { id: this.nextId++, name, content, status: 'waiting' };
     this._todos.update((todos) => [...todos, todo]);
   }
 
   /**
-   * Delete the todo (filter returns a new array without it)
+   * Delete the todo with this id (filter returns a new array without it)
    */
-  deleteTodo(todo: Todo): void {
-    this._todos.update((todos) => todos.filter((t) => t !== todo));
+  deleteTodo(id: number): void {
+    this._todos.update((todos) => todos.filter((todo) => todo.id !== id));
   }
 
   /**

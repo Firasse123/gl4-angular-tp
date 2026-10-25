@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
-import { Todo } from '../model/todo';
 import { TodoService } from '../service/todo.service';
 import { FormsModule } from '@angular/forms';
 
@@ -26,12 +25,12 @@ export class TodoComponent {
   );
 
   addTodo() {
-    this.todoService.addTodo(new Todo(this.name(), this.content()));
+    this.todoService.addTodo(this.name().trim(), this.content().trim());
     this.name.set('');
     this.content.set('');
   }
 
-  deleteTodo(todo: Todo) {
-    this.todoService.deleteTodo(todo);
+  deleteTodo(id: number) {
+    this.todoService.deleteTodo(id);
   }
 }

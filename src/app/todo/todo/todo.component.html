@@ -1,10 +1,10 @@
 <div class="row">
   <div class="col">
     <ol class="list-group">
-      @for (todo of todos(); track todo) {
+      @for (todo of todos(); track todo.id) {
         <li class="list-group-item">
-          {{todo.name}} : {{todo.content}}
-          <i (click)="deleteTodo(todo)" class="fa fa-trash" aria-hidden="true"></i>
+          {{todo.name}} : {{todo.content}} ({{todo.status}})
+          <i (click)="deleteTodo(todo.id)" class="fa fa-trash" aria-hidden="true"></i>
         </li>
       }
     </ol>
