@@ -34,7 +34,7 @@ describe('CvComponent', () => {
     loggerMock = jasmine.createSpyObj<LoggerService>('LoggerService', ['logger']);
 
     await TestBed.configureTestingModule({
-      declarations: [CvComponent],
+      imports: [CvComponent],
       providers: [
         { provide: CvService, useValue: cvServiceMock },
         { provide: ToastrService, useValue: toastrMock },
@@ -61,7 +61,9 @@ describe('CvComponent', () => {
 
   it('should catch error in cvs$ and fallback to fake cvs with toastr alert', (done) => {
     cvServiceMock.getCvs.and.returnValue(throwError(() => new Error('Server error')));
-    const errorComponent = new CvComponent(loggerMock, toastrMock, cvServiceMock);
+    const errorFixture = TestBed.createComponent(CvComponent);
+    const errorComponent = errorFixture.componentInstance;
+    errorFixture.detectChanges();
 
     errorComponent.cvs$.subscribe((cvs) => {
       expect(cvs).toEqual(fakeCvs);

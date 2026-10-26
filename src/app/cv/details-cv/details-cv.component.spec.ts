@@ -8,7 +8,6 @@ import { CvService } from '../services/cv.service';
 import { AuthService } from '../../auth/services/auth.service';
 import { APP_ROUTES } from '../../../config/routes.config';
 import { Cv } from '../model/cv';
-import { DefaultImagePipe } from '../pipes/default-image.pipe';
 
 describe('DetailsCvComponent', () => {
   let component: DetailsCvComponent;
@@ -38,7 +37,7 @@ describe('DetailsCvComponent', () => {
     cvServiceMock.deleteCvById.and.returnValue(of({}));
 
     await TestBed.configureTestingModule({
-      declarations: [DetailsCvComponent, DefaultImagePipe],
+      imports: [DetailsCvComponent],
       providers: [
         { provide: CvService, useValue: cvServiceMock },
         { provide: Router, useValue: routerMock },
@@ -105,4 +104,3 @@ describe('DetailsCvComponent', () => {
     expect(routerMock.navigate).not.toHaveBeenCalled();
   });
 });
-
