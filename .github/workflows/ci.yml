@@ -1,0 +1,30 @@
+name: CI
+
+# Run on every push (any branch) and on every pull request
+on:
+  push:
+  pull_request:
+
+# The workflow only needs to read the code
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v7
+
+      - name: Install Node 22
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      # --legacy-peer-deps: ngx-toastr 20 still declares Angular 21 as its peer
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build (production)
+        run: npm run build
