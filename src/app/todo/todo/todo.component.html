@@ -1,18 +1,27 @@
+<div class="row mb-3">
+  <div class="col">
+    <input [(ngModel)]="name" type="text" class="form-control" placeholder="name">
+  </div>
+  <div class="col">
+    <input [(ngModel)]="content" type="text" class="form-control" placeholder="content">
+  </div>
+  <div class="col-auto">
+    <button (click)="addTodo()" [disabled]="!canAdd()" class="btn btn-primary">add</button>
+  </div>
+</div>
+
 <div class="row">
-  <div class="col">
-    <ol class="list-group">
-      @for (todo of todos(); track todo.id) {
-        <li class="list-group-item">
-          {{todo.name}} : {{todo.content}} ({{todo.status}})
-          <i (click)="deleteTodo(todo.id)" class="fa fa-trash" aria-hidden="true"></i>
-        </li>
-      }
-    </ol>
-  </div>
-  <div class="col">
-    name: <input [(ngModel)]="name" type="text" class="form-control">
-    content: <input [(ngModel)]="content" type="text" class="form-control">
-    <button (click)="addTodo()" [disabled]="!canAdd()"
-    class="btn btn-primary m-2">add</button>
-  </div>
+  @for (column of columns; track column.title) {
+    <div class="col">
+      <h5>{{column.title}}</h5>
+      <ul class="list-group">
+        @for (todo of column.todos(); track todo.id) {
+          <li class="list-group-item">
+            {{todo.name}} : {{todo.content}}
+            <i (click)="deleteTodo(todo.id)" class="fa fa-trash" aria-hidden="true"></i>
+          </li>
+        }
+      </ul>
+    </div>
+  }
 </div>

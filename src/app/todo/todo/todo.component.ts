@@ -12,8 +12,12 @@ import { FormsModule } from '@angular/forms';
 export class TodoComponent {
   private todoService = inject(TodoService);
 
-  /** The list, read from the service */
-  readonly todos = this.todoService.todos;
+  /** The three columns: a title and the signal of the todos to show in it */
+  readonly columns = [
+    { title: 'Waiting', todos: this.todoService.waitingTodos },
+    { title: 'In Progress Todos', todos: this.todoService.inProgressTodos },
+    { title: 'Done Todos', todos: this.todoService.doneTodos },
+  ];
 
   /** Form fields */
   readonly name = signal('');

@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { Todo } from '../model/todo';
 import { LoggerService } from '../../services/logger.service';
 
@@ -16,6 +16,17 @@ export class TodoService {
 
   /** Read-only view of the list for the components. */
   readonly todos = this._todos.asReadonly();
+
+  /** One list per status: filtered again automatically when the todos change */
+  readonly waitingTodos = computed(() =>
+    this.todos().filter((todo) => todo.status === 'waiting'),
+  );
+  readonly inProgressTodos = computed(() =>
+    this.todos().filter((todo) => todo.status === 'in progress'),
+  );
+  readonly doneTodos = computed(() =>
+    this.todos().filter((todo) => todo.status === 'done'),
+  );
 
   /**
    * Create a todo with a unique id and the 'waiting' status,
