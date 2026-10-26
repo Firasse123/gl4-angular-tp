@@ -13,11 +13,11 @@ import { FormsModule } from '@angular/forms';
 export class TodoComponent {
   private todoService = inject(TodoService);
 
-  /** The three columns: a title and the signal of the todos to show in it */
+  /** The three columns: a title, a background color and the signal of the todos to show in it */
   readonly columns = [
-    { title: 'Waiting', todos: this.todoService.waitingTodos },
-    { title: 'In Progress Todos', todos: this.todoService.inProgressTodos },
-    { title: 'Done Todos', todos: this.todoService.doneTodos },
+    { title: 'Waiting', color: 'bg-secondary-subtle', todos: this.todoService.waitingTodos },
+    { title: 'In Progress Todos', color: 'bg-warning-subtle', todos: this.todoService.inProgressTodos },
+    { title: 'Done Todos', color: 'bg-success-subtle', todos: this.todoService.doneTodos },
   ];
 
   /** Options of the status select */
