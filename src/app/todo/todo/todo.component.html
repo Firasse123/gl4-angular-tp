@@ -1,18 +1,32 @@
-<div class="row">
-  <div class="col">
-    <ol class="list-group">
-      @for (todo of todos; track todo) {
-        <li class="list-group-item">
-          {{todo.name}} : {{todo.content}}
-          <i (click)="deleteTodo(todo)" class="fa fa-trash" aria-hidden="true"></i>
-        </li>
-      }
-    </ol>
+<div class="bg-info-subtle p-2">
+  <div class="d-flex gap-2 mb-2">
+    <input [(ngModel)]="name" type="text" class="form-control form-control-sm" placeholder="name">
+    <input [(ngModel)]="content" type="text" class="form-control form-control-sm" placeholder="content">
+    <button (click)="addTodo()" [disabled]="!canAdd()" class="btn btn-danger btn-sm">add</button>
   </div>
-  <div class="col">
-    name: <input [(ngModel)]="todo.name" type="text" class="form-control">
-    content: <input [(ngModel)]="todo.content" type="text" class="form-control">
-    <button (click)="addTodo()" [disabled]="!todo.name.trim() || !todo.content.trim()"
-    class="btn btn-primary m-2">add</button>
+
+  <div class="row g-0">
+    @for (column of columns; track column.title) {
+      <div class="col border p-2" [class]="column.color">
+        <div class="mb-2">{{column.title}}</div>
+        @for (todo of column.todos(); track todo.id) {
+          <div class="card mb-2">
+            <div class="card-body p-2">
+              <div class="d-flex justify-content-between">
+                <strong>{{todo.name}}</strong>
+                <i (click)="deleteTodo(todo.id)" class="fa fa-trash text-danger" aria-hidden="true"></i>
+              </div>
+              <p class="small mb-1">{{todo.content}}</p>
+              <select class="form-select form-select-sm"
+                [ngModel]="todo.status" (ngModelChange)="changeStatus(todo.id, $event)">
+                @for (status of statuses; track status) {
+                  <option [value]="status">{{status}}</option>
+                }
+              </select>
+            </div>
+          </div>
+        }
+      </div>
+    }
   </div>
 </div>
