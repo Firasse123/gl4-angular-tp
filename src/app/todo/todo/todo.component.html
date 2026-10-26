@@ -19,6 +19,12 @@
           <li class="list-group-item">
             {{todo.name}} : {{todo.content}}
             <i (click)="deleteTodo(todo.id)" class="fa fa-trash" aria-hidden="true"></i>
+            <select class="form-select form-select-sm mt-1"
+              [ngModel]="todo.status" (ngModelChange)="changeStatus(todo.id, $event)">
+              @for (status of statuses; track status) {
+                <option [value]="status">{{status}}</option>
+              }
+            </select>
           </li>
         }
       </ul>

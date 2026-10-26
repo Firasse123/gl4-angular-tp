@@ -1,5 +1,5 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { Todo } from '../model/todo';
+import { Todo, TodoStatus } from '../model/todo';
 import { LoggerService } from '../../services/logger.service';
 
 @Injectable({
@@ -35,6 +35,17 @@ export class TodoService {
   addTodo(name: string, content: string): void {
     const todo: Todo = { id: this.nextId++, name, content, status: 'waiting' };
     this._todos.update((todos) => [...todos, todo]);
+  }
+
+  /**
+   * Change the status of the todo with this id.
+   * map returns a new array, and the changed todo is a new object (copy + new status),
+   * so the signal notifies and the computed lists are filtered again.
+   */
+  updateStatus(id: number, status: TodoStatus): void {
+    this._todos.update((todos) =>
+      todos.map((todo) => (todo.id === id ? { ...todo, status } : todo)),
+    );
   }
 
   /**
