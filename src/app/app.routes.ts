@@ -11,6 +11,7 @@ import { AddCvComponent } from "./cv/add-cv/add-cv.component";
 import { CvComponent } from "./cv/cv/cv.component";
 import { DetailsCvComponent } from "./cv/details-cv/details-cv.component";
 import { RhComponent } from "./optimizationPattern/rh/rh.component";
+import { RainbowTestComponent } from "./directives/rainbow-test/rainbow-test.component";
 
 export const routes: Route[] = [
     { path: "login", component: LoginComponent },
@@ -27,6 +28,7 @@ export const routes: Route[] = [
     children: [
       { path: "todo", component: TodoComponent },
       { path: "word", component: MiniWordComponent },
+      { path: "rainbow", component: RainbowTestComponent },
     ],
   },
   {
