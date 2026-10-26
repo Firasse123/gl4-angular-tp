@@ -1,6 +1,6 @@
 export interface LoginResponseDto {
   id: string;
   ttl: number;
-  created: Date;
+  created: string;
   userId: number;
 }
