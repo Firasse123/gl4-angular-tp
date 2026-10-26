@@ -5,8 +5,9 @@
         <div class="tab-pane active" id="profile">
           <h4 class="m-y-2">Cv {{ cv.firstname }} {{ cv.name }}</h4>
           <div class="d-flex justify-content-center">
-            <img width="150px" height="150px" class="rounded-circle align-content-center"
-              src="assets/images/{{ cv.path | defaultImage }}" alt="{{ cv.name }}" />
+            <img #photo width="150px" height="150px" class="rounded-circle align-content-center"
+              src="assets/images/{{ cv.path | defaultImage }}"
+              (error)="photo.src = 'assets/images/cv.png'" alt="{{ cv.name }}" />
             </div>
             <div class="row">
               <div class="col-md-12">
