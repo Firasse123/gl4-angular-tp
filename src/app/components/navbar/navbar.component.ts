@@ -8,7 +8,7 @@ import { APP_ROUTES } from '../../../config/routes.config';
     selector: 'app-navbar',
     templateUrl: './navbar.component.html',
     styleUrls: ['./navbar.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [RouterLinkActive, RouterLink]
 })
 export class NavbarComponent {
