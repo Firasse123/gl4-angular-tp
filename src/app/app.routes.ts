@@ -12,7 +12,7 @@ import { CvComponent } from "./cv/cv/cv.component";
 import { DetailsCvComponent } from "./cv/details-cv/details-cv.component";
 import { RhComponent } from "./optimizationPattern/rh/rh.component";
 import { RainbowTestComponent } from "./directives/rainbow-test/rainbow-test.component";
-
+import { ProductsComponent } from "./products/products.component";
 export const routes: Route[] = [
     { path: "login", component: LoginComponent },
   { path: "rh", component: RhComponent },
@@ -29,6 +29,8 @@ export const routes: Route[] = [
       { path: "todo", component: TodoComponent },
       { path: "word", component: MiniWordComponent },
       { path: "rainbow", component: RainbowTestComponent },
+      { path: "products", component: ProductsComponent }, 
+
     ],
   },
   {
