@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-4">
+    @if (cvsResource.isLoading()) {
+      <div class="alert alert-info">Chargement des cvs...</div>
+    } @else if (cvsResource.error()) {
+      <div class="alert alert-danger">
+        Problème avec le serveur veuillez contacter l'admin
+      </div>
+    } @else {
+      <div class="list-group">
+        @for (cv of cvsResource.value(); track cv.id) {
+          <a
+            class="list-group-item list-group-item-action"
+            [routerLink]="[cv.id]"
+            routerLinkActive="active"
+            >
+            <app-item [cv]="cv"></app-item>
+          </a>
+        } @empty {
+          <div class="list-group-item">Aucun cv à afficher</div>
+        }
+      </div>
+    }
+  </div>
+  <div class="col-8">
+    <router-outlet></router-outlet>
+  </div>
+</div>
