@@ -8,7 +8,8 @@ import { BrowserModule, bootstrapApplication } from "@angular/platform-browser";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ToastrModule } from "ngx-toastr";
-import { provideRouter, withComponentInputBinding } from "@angular/router";
+import { provideRouter, withComponentInputBinding, withPreloading } from "@angular/router";
+import { CustomPreloadingStrategy } from "./app/preloading/custom-preloading.strategy";
 import { routes } from "./app/app.routes";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { AppComponent } from "./app/app.component";
@@ -17,7 +18,7 @@ import { AppComponent } from "./app/app.component";
 bootstrapApplication(AppComponent, {
     providers: [
         provideZoneChangeDetection(),
-        provideRouter(routes, withComponentInputBinding()),
+        provideRouter(routes, withComponentInputBinding(), withPreloading(CustomPreloadingStrategy)),
         importProvidersFrom(BrowserModule, FormsModule, BrowserAnimationsModule,
         ToastrModule.forRoot(),
         ReactiveFormsModule, ServiceWorkerModule.register("ngsw-worker.js", {
