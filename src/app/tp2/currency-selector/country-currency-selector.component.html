@@ -1,10 +1,16 @@
 <h1>Currency Selector</h1>
 <hr>
-<select class="form-control" >
-    <option>country</option>
-</select>
-<select class="form-control">
 
-  <option >currency</option>
-
+<select class="form-control" #countrySelect (change)="selectCountry(countrySelect.value)">
+  @for (c of countries(); track c.name) {
+    <option [value]="c.name" [selected]="c.name === country().name">{{ c.name }}</option>
+  }
 </select>
+
+<select class="form-control" #currencySelect (change)="selectCurrency(currencySelect.value)">
+  @for (cur of currencies(); track cur) {
+    <option [value]="cur" [selected]="cur === currency()">{{ cur }}</option>
+  }
+</select>
+
+<p>Sélection : {{ country().name }} / {{ currency() }}</p>
