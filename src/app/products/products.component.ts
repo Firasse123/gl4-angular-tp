@@ -43,10 +43,10 @@ export class ProductsComponent {
   });
 
   /**
-   * Le flux des produits à afficher :
-   * 1. concatMap : une page = un appel HTTP, les appels sont traités l'un après l'autre.
-   * 2. catchError (dans le concatMap) : une erreur réseau n'arrête pas le flux principal.
-   * 3. scan : accumule les pages sans jamais muter un tableau.
+   
+   * 1. concatMap : un appel HTTP= 1 page,ordre request=display ordre .
+   * 2. catchError (dans le concatMap) : une erreur réseau n'arrête pas le flux principal au contraie du pipe.
+   * 3. scan : ymergi accumule les pages sans jamais muter un tableau.
    * 4. takeWhile(..., true) : complète le flux après la dernière page (incluse),
    *    donc plus aucun appel n'est possible quand il n'y a plus de produits.
    */
