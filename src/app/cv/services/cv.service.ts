@@ -105,13 +105,14 @@ export class CvService {
 
   /**
    * Recherche les cvs dont le name contient la chaine name passée en paramètre
+   * (filtre Loopback `like`, envoyé dans le query param `filter`)
    * @param name : string
-   * @returns cvs Cv[]
+   * @returns Observable<Cv[]>
    */
-  selectByName(name: string) {
-    const search = `{"where":{"name":{"like":"%${name}%"}}}`;
-    const params = new HttpParams().set("filter", search);
-    return this.http.get<any>(API.cv, { params });
+  selectByName(name: string): Observable<Cv[]> {
+    const filter = JSON.stringify({ where: { name: { like: `%${name}%` } } });
+    const params = new HttpParams().set("filter", filter);
+    return this.http.get<Cv[]>(API.cv, { params });
   }
   /**
    * Recherche les cvs dont la valeur est égale à la chaine passée en paramètre
