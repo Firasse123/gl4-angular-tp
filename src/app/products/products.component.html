@@ -1,10 +1,10 @@
-@if (products$ | async; as productsList) {
-    <button class="btn btn-primary"> More Products</button>
+@if (view$ | async; as view) {
+  <button class="btn btn-primary" [disabled]="!view.hasMore" (click)="loadMore()"> More Products</button>
   <div class="alert alert-warning">
-    Product Number: {{productsList?.length}}
+    Product Number: {{view.products.length}}
   </div>
   <div class="row">
-    @for (product of productsList; track product) {
+    @for (product of view.products; track product.id) {
       <div class="col-4">
         <img class="rounded-circle" src="{{product.thumbnail}}" width="150px" height="150px">
         {{product.title}}
@@ -14,4 +14,3 @@
 } @else {
   Loading...
 }
-

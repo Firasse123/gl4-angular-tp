@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { API } from "src/config/api.config";
 import { Settings } from "../dto/product-settings.dto";
@@ -12,8 +12,7 @@ export class ProductService {
 
   getProducts(setting: Settings) {
     const { limit, skip } = setting;
-    return this.http.get<ProductApiResponse>(
-      `${API.products}?limit=${limit}&skip=${skip}`
-    );
+    const params = new HttpParams().set("limit", limit).set("skip", skip);
+    return this.http.get<ProductApiResponse>(API.products, { params });
   }
 }

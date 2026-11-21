@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-4">
+    <div class="list-group">
+      @for (cv of cvs$ | async; track cv.id) {
+        <a
+          class="list-group-item list-group-item-action"
+          [routerLink]="[cv.id]"
+          routerLinkActive="active"
+          >
+          <app-item [cv]="cv"></app-item>
+        </a>
+      } @empty {
+        <div class="list-group-item">Aucun cv à afficher</div>
+      }
+    </div>
+  </div>
+  <div class="col-8">
+    <router-outlet></router-outlet>
+  </div>
+</div>

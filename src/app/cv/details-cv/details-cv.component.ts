@@ -1,50 +1,65 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 import { Cv } from '../model/cv';
 import { CvService } from '../services/cv.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { APP_ROUTES } from '../../../config/routes.config';
 import { AuthService } from '../../auth/services/auth.service';
 import { DefaultImagePipe } from '../pipes/default-image.pipe';
+import { EMPTY, Observable, catchError, map, switchMap } from 'rxjs';
 
 @Component({
-    selector: 'app-details-cv',
-    templateUrl: './details-cv.component.html',
-    styleUrls: ['./details-cv.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [DefaultImagePipe]
+  selector: 'app-details-cv',
+  templateUrl: './details-cv.component.html',
+  styleUrls: ['./details-cv.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [DefaultImagePipe, AsyncPipe],
 })
-export class DetailsCvComponent implements OnInit {
+export class DetailsCvComponent {
   private cvService = inject(CvService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private toastr = inject(ToastrService);
   authService = inject(AuthService);
 
-  cv: Cv | null = null;
+  /**
+   * On écoute le paramMap (et non le snapshot) : dans le master-detail le
+   * composant n'est pas recréé quand seul l'id change, le snapshot resterait figé.
+   * switchMap annule la requête précédente si on change de cv rapidement.
+   */
+  cv$: Observable<Cv> = this.activatedRoute.paramMap.pipe(
+    map((params) => Number(params.get('id'))),
+    switchMap((id) =>
+      this.cvService.getCvById(id).pipe(
+        catchError(() => {
+          this.toastr.error(`Le cv d'id ${id} n'existe pas`);
+          this.goBack();
+          return EMPTY;
+        })
+      )
+    )
+  );
 
-  ngOnInit() {
-    const id = this.activatedRoute.snapshot.params['id'];
-    this.cvService.getCvById(+id).subscribe({
-        next: (cv) => {
-          this.cv = cv;
-        },
-        error: (e) => {
-          this.router.navigate([APP_ROUTES.cv]);
-        },
+  deleteCv(cv: Cv) {
+    this.cvService
+      .deleteCvById(cv.id)
+      .pipe(
+        catchError(() => {
+          this.toastr.error(`Problème avec le serveur veuillez contacter l'admin`);
+          return EMPTY;
+        })
+      )
+      .subscribe(() => {
+        this.toastr.success(`${cv.name} supprimé avec succès`);
+        this.goBack();
       });
   }
-  deleteCv(cv: Cv) {
-    this.cvService.deleteCvById(cv.id).subscribe({
-      next: () => {
-        this.toastr.success(`${cv.name} supprimé avec succès`);
-        this.router.navigate([APP_ROUTES.cv]);
-      },
-      error: () => {
-        this.toastr.error(
-          `Problème avec le serveur veuillez contacter l'admin`
-        );
-      },
-    });
+
+  /**
+   * Remonte d'un niveau par rapport à la route active :
+   * /cv/:id -> /cv et /cv/list/:id -> /cv/list
+   */
+  private goBack() {
+    this.router.navigate(['..'], { relativeTo: this.activatedRoute });
   }
 }
