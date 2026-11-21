@@ -24,6 +24,7 @@
         <a class="nav-link" [routerLink]="['word']" routerLinkActive="active text-primary">Word</a>
         <a class="nav-link" [routerLink]="['admin', 'color']" routerLinkActive="active text-primary">Color</a>
         <a class="nav-link" [routerLink]="['rh']" routerLinkActive="active text-primary">Rh</a>
+        <a class="nav-link" [routerLink]="['products-filter']" routerLinkActive="active text-primary">Filtre produits</a>
         @if (authService.isAuthenticated()) {
           <span class="navbar-text px-2">{{ authService.user()?.email }}</span>
           <button type="button" class="nav-link btn btn-link" (click)="logout()">Logout</button>

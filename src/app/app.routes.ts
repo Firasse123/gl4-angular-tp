@@ -49,6 +49,13 @@ export const routes: Route[] = [
             (m) => m.CountryCurrencySelectorComponent
           ),
       },
+      {
+        path: "products-filter",
+        loadComponent: () =>
+          import("./tp2/products-filter/products-filter.component").then(
+            (m) => m.ProductsFilterComponent
+          ),
+      },
     ],
   },
   {
