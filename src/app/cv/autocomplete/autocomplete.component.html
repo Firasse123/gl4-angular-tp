@@ -1,3 +1,22 @@
-<form [formGroup]="form">
-  <input type="text" class="form-control" formControlName="search" />
-</form>
+<input
+  type="text"
+  class="form-control"
+  placeholder="Rechercher un cv par nom (2 caractères minimum)"
+  [(ngModel)]="search"
+/>
+
+@if (cvs.isLoading()) {
+  <div class="alert alert-info mt-2">Recherche en cours...</div>
+} @else if (cvs.error()) {
+  <div class="alert alert-danger mt-2">Problème avec le serveur, veuillez réessayer.</div>
+} @else {
+  <div class="list-group mt-2">
+    @for (cv of cvs.value(); track cv.id) {
+      <button type="button" class="list-group-item list-group-item-action" (click)="selectedCv.set(cv)">
+        <app-item [cv]="cv" [size]="40"></app-item>
+      </button>
+    }
+  </div>
+}
+
+<app-cv-card [cv]="selectedCv()"></app-cv-card>

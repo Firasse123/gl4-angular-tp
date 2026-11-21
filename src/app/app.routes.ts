@@ -11,6 +11,7 @@ import { AddCvComponent } from "./cv/add-cv/add-cv.component";
 import { CvComponent } from "./cv/cv/cv.component";
 import { DetailsCvComponent } from "./cv/details-cv/details-cv.component";
 import { MasterDetailsCvComponent } from "./cv/master-details-cv/master-details-cv.component";
+import { AutocompleteComponent } from "./cv/autocomplete/autocomplete.component";
 import { RhComponent } from "./optimizationPattern/rh/rh.component";
 import { RainbowTestComponent } from "./directives/rainbow-test/rainbow-test.component";
 import { TtcComponent } from "./components/ttc/ttc.component";
@@ -29,6 +30,7 @@ export const routes: Route[] = [
     component: MasterDetailsCvComponent,
     children: [{ path: ":id", component: DetailsCvComponent }],
   },
+  { path: "cv/search", component: AutocompleteComponent },
   { path: "cv/:id", component: DetailsCvComponent },
   {
     path: "",

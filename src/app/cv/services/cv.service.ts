@@ -1,8 +1,11 @@
-import { Injectable, inject, signal } from "@angular/core";
+import { Injectable, Signal, inject, signal } from "@angular/core";
 import { Cv } from "../model/cv";
 import { Observable } from "rxjs";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpParams, httpResource } from "@angular/common/http";
 import { API } from "../../../config/api.config";
+
+/** En dessous de ce nombre de caractères, aucune requête n'est envoyée. */
+export const SEARCH_MIN_LENGTH = 2;
 
 @Injectable({
   providedIn: "root",
@@ -107,6 +110,25 @@ export class CvService {
     const params = new HttpParams().set("filter", search);
     return this.http.get<any>(API.cv, { params });
   }
+  /**
+   * Version signal de selectByName : la requête est relancée à chaque
+   * changement de `name`, et l'ancienne est annulée automatiquement.
+   * À appeler dans un contexte d'injection (ex. initialisation d'un champ de composant).
+   *
+   * @param name : Signal<string>, le nom recherché (déjà debouncé par l'appelant)
+   */
+  searchByName(name: Signal<string>) {
+    return httpResource<Cv[]>(
+      () => {
+        // Retourner undefined = pas de requête, la resource reste "idle".
+        if (name().length < SEARCH_MIN_LENGTH) return undefined;
+        const filter = JSON.stringify({ where: { name: { like: `%${name()}%` } } });
+        return { url: API.cv, params: { filter } };
+      },
+      { defaultValue: [] }
+    );
+  }
+
   /**
    * Recherche les cvs dont la valeur est égale à la chaine passée en paramètre
    * @param property : string, la propriété sur laquelle on va requeter
