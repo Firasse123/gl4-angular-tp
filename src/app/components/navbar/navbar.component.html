@@ -41,6 +41,12 @@
               routerLinkActive="active text-primary"
               >Master Details</a
               >
+            <a
+              class="nav-link"
+              [routerLink]="['cv/search']"
+              routerLinkActive="active text-primary"
+              >Recherche</a
+              >
               @if (authService.isAuthenticated()) {
                 <a
                   class="nav-link"
