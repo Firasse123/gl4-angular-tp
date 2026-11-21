@@ -6,6 +6,7 @@ import { ToastrService } from "ngx-toastr";
 import { Cv } from "../model/cv";
 import { CvService } from "../services/cv.service";
 import { ItemComponent } from "../item/item.component";
+import { CvCardComponent } from "../cv-card/cv-card.component";
 
 /** Temps de silence (ms) après la dernière frappe avant de lancer la recherche */
 const SEARCH_DEBOUNCE_MS = 300;
@@ -17,7 +18,7 @@ const SEARCH_MIN_LENGTH = 2;
   templateUrl: "./autocomplete.component.html",
   styleUrls: ["./autocomplete.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, AsyncPipe, ItemComponent],
+  imports: [ReactiveFormsModule, AsyncPipe, ItemComponent, CvCardComponent],
 })
 export class AutocompleteComponent {
   private readonly cvService = inject(CvService);
@@ -46,4 +47,7 @@ export class AutocompleteComponent {
           )
     )
   );
+
+  /** Le cv cliqué dans la liste */
+  protected readonly selectedCv$ = this.cvService.selectCv$;
 }
