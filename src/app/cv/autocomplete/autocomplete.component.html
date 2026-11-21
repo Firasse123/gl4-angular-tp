@@ -1,3 +1,19 @@
-<form [formGroup]="form">
-  <input type="text" class="form-control" formControlName="search" />
-</form>
+<input
+  type="search"
+  class="form-control"
+  placeholder="Rechercher un cv par nom (2 caractères minimum)"
+  aria-label="Rechercher un cv par nom"
+  [formControl]="search"
+/>
+
+@if (cvs$ | async; as cvs) {
+  <ul class="list-group mt-2">
+    @for (cv of cvs; track cv.id) {
+      <li class="list-group-item">
+        <app-item [cv]="cv" [size]="40" />
+      </li>
+    } @empty {
+      <li class="list-group-item text-muted">Aucun cv trouvé</li>
+    }
+  </ul>
+}
