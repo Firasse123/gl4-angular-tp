@@ -5,8 +5,28 @@
     </div>
     <app-list [cvs]="cvs$ | async"></app-list>
   </div>
-  <div class="col">
+  <div class="col" #cardZone>
     <app-cv-card [cv]="selectedCv$ | async"></app-cv-card>
   </div>
 </div>
-<app-embauche></app-embauche>
+
+<!--
+  Embauche : en bas de page et vide tant que personne n'est pré-embauché.
+  - on viewport : affichage quand la zone devient visible
+  - on interaction(cardZone) : le clic sur "embaucher" (dans la carte) remonte jusqu'à cardZone
+  - prefetch on idle : le chunk est téléchargé dès que le navigateur est libre
+-->
+@defer (on viewport; on interaction(cardZone); prefetch on idle) {
+  <app-embauche></app-embauche>
+} @placeholder (minimum 500ms) {
+  <div class="embauche-slot text-muted">Liste des cv pré-embauchés</div>
+} @loading (after 100ms; minimum 500ms) {
+  <div class="embauche-slot text-muted">
+    <span class="spinner-border spinner-border-sm" role="status"></span>
+    Chargement des cv pré-embauchés…
+  </div>
+} @error {
+  <div class="alert alert-danger mt-2">
+    Impossible de charger la liste des cv pré-embauchés.
+  </div>
+}
